@@ -109,9 +109,9 @@ class QuizView extends Component {
                   return (
                     <div
                       key={id}
-                      value={id}
+                      value={parseInt(id)+1}
                       className="play-category"
-                      onClick={() => this.selectCategory({type:this.state.categories[id], id})}>
+                      onClick={() => this.selectCategory({type:this.state.categories[id], id:(parseInt(id)+1)})}>
                       {this.state.categories[id]}
                     </div>
                   )
@@ -132,8 +132,8 @@ class QuizView extends Component {
 
   evaluateAnswer = () => {
     const formatGuess = this.state.guess.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase()
-    const answerArray = this.state.currentQuestion.answer.toLowerCase().split(' ');
-    return answerArray.includes(formatGuess)
+    const answerArray = this.state.currentQuestion.answer.toLowerCase();
+    return answerArray==formatGuess
   }
 
   renderCorrectAnswer(){

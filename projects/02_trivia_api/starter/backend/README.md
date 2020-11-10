@@ -87,6 +87,31 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
+
+GET '/questions'
+- Fetches a dictionary of questions in which the keys are the ids and the value is the corresponding string of the category
+- Request Arguments: None
+- Returns: An object of questions, categories, that contains a object of id: category.id, total_questions and current_category. 
+
+return{
+    'success':True,
+    'questions':[
+        {
+        "id":1,
+        "questions":"xxx",
+        "answer":"ttt",
+        "current_catgeory":"hh"
+    },
+        {
+        "id":1,
+        "questions":"xxx",
+        "answer":"ttt",
+        "current_catgeory":"hh"
+    },
+    ]
+}
+
+
 ```
 
 
