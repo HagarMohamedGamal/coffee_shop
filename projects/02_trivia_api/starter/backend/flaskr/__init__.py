@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from  sqlalchemy.sql.expression import func
 from flask_cors import CORS
 import random
 
@@ -122,7 +123,8 @@ def create_app(test_config=None):
     else:
       question.delete()
       return jsonify({
-        "success" : True
+        "success" : True,
+        "id" : quest_id
       })
 
   '''
@@ -189,23 +191,22 @@ def create_app(test_config=None):
     data = request.get_json(force=True)
     previous_questions = data["previous_questions"]
     quiz_category = data["quiz_category"]
-    category = Category.query.filter(Category.type.like(quiz_category["type"])).first()
     
-    if category is None:
-      question = Question.query.filter(~Question.id.in_(previous_questions)).first()
+    if quiz_category["id"]!=0:
+      category = Category.query.filter(Category.id==quiz_category["id"]).first()
+    
+    if quiz_category["id"]==0:
+      question = Question.query.filter(~Question.id.in_(previous_questions)).order_by(func.random()).first()
+    elif category is None:
+      abort(404)
     else:
-      # if len(previous_questions)>0:
-      question = Question.query.filter(~Question.id.in_(previous_questions)).filter(Question.category==category.id).first()
-      # else:
-      #   question = Question.query.filter(Question.category==category.id).first()
+      question = Question.query.filter(~Question.id.in_(previous_questions)).filter(Question.category==category.id).order_by(func.random()).first()
       
-    
     if question is None:
       return jsonify({
         "success" : False
       })
     else:
-      print(question.format())
       return jsonify({
         "success" : True,
         "question" : question.format()
